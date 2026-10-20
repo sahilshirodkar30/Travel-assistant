@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+.env.example
+other_info.txt
+
+project_phases.txt

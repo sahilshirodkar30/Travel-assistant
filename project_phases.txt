@@ -1,6 +1,6 @@
 Phase 1: Foundations (no external services)
 
-app/config.py: every other file imports settings from here.
+app/config.py: every other file imports settings from here. -- done
 app/guardrails/input_guard.py and tests/test_guardrails.py: pure regex, so you can test it immediately. Get injection blocking and PII masking passing first.
 app/guardrails/output_guard.py: add its tests to the same test file.
 app/auth/security.py: JWT creation, current_user and require_ops.
