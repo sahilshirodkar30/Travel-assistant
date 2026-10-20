@@ -1,0 +1,27 @@
+Phase 1: Foundations (no external services)
+
+app/config.py: every other file imports settings from here.
+app/guardrails/input_guard.py and tests/test_guardrails.py: pure regex, so you can test it immediately. Get injection blocking and PII masking passing first.
+app/guardrails/output_guard.py: add its tests to the same test file.
+app/auth/security.py: JWT creation, current_user and require_ops.
+
+Phase 2: Fake backend and the data
+5. scripts/mock_bookings_api.py: run it on port 9000 so you have a stand-in orders API.
+6. app/tools/bookings.py: the first real tool. Test it with a plain script: fetch #48291 as the owner, then as another customer, and confirm it fails.
+7. app/rag/loaders.py, then tests/test_loaders.py, and a dry run of app/rag/ingest.py. This needs no keys either.
+
+Phase 3: The AI core (needs API keys)
+8. app/llm/router.py, then app/llm/gateway.py. Test one Groq call, then force a failure to see the fallback to DeepSeek work.
+9. app/rag/pinecone_store.py, app/rag/ingest.py (a real run), then app/rag/retriever.py.
+10. app/agent/intents.py, state.py, then graph.py. Build the refund path first (classify, fetch booking, draft). Add RAG, then the write, confirm and approval path, afterwards.
+
+Phase 4: Wire it together
+11. app/services/chat_service.py: the pipeline from input guard to output guard.
+12. app/main.py with app/auth/routes.py: a working /chat endpoint. Test it with curl before any UI exists.
+13. app/gateway/rate_limit.py and load_shed.py, then app/cache/semantic_cache.py. These are optimisations, so add them once the basic flow works.
+14. app/hitl/approvals.py.
+
+Phase 5: UI, observability, release safety
+15. ui/streamlit_app.py, ui/api_client.py, and ui/pages/1_Ops_Approvals.py.
+16. app/observability/setup.py: add Logfire now, so you can read the traces of everything above.
+17. evals/run_evals.py, then .github/workflows/ci.yml, Dockerfile and docker-compose.yml.
