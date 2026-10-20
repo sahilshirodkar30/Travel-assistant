@@ -21,3 +21,5 @@ streamlit
 requests
 pytest
 pytest-asyncio
+pypdf
+python-docx
