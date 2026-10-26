@@ -56,3 +56,9 @@ async def decide(aid: str, body: DecisionIn, ops: User = Depends(require_ops)):
         return {"error": "not found"}
     owner = User(email="", customer_id=item["customer_id"], role="user")
     return await chat_service.resume(owner, item["thread_id"], {"approved": body.approved, "by": ops.email})
+
+
+# @app.post("/auth/google")
+# def login(body: GoogleLogin):  # body.id_token comes from the frontend's Google sign-in
+#     email = verify_google_login(body.id_token)
+#     return {"access_token": create_token(email), "token_type": "bearer"}
